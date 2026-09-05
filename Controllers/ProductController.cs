@@ -1,24 +1,33 @@
 ﻿
-
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using NetAPI.Services;
+using System.Reflection.PortableExecutable;
 
-namespace NetAPI.Controllers
+
+namespace NetAPI.Controllers;
+
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProductController(ProductServices service) : ControllerBase
 {
+   
 
-    
-    [ApiController]
-    public class ProductController : ControllerBase
+    [HttpGet]
+    public async Task<ActionResult<List<Product>>> GetAllProducts()
     {
-        private readonly ApplicationDbContext _context;
-
-        public ProductController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        
+        return Ok(await service.GetAllProducts());
     }
-  
-}
+
+    [HttpGet("{id}")] // api/"controllername"/id
+    public async Task<ActionResult<Product>> GetProduct(int id)
+    {
+        var product = await service.GetProductById(id);
+        if (product == null)
+        {
+            return NotFound("Product does not exist");
+        }
+        return Ok(product);
+    }
+} 
+
