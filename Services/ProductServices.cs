@@ -1,37 +1,51 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using Microsoft.EntityFrameworkCore;
+using NetAPI.DTOs;
+using System.Reflection.PortableExecutable;
 
 namespace NetAPI.Services
 {
-    public class ProductServices
+    public class ProductServices(ApplicationDbContext context)
     {
-        static List<Product> products = new List<Product>
-        {
-            new Product { Id = 1, Name = "Product 1", Price = 10.0m },
-            new Product { Id = 2, Name = "Product 2", Price = 20.0m },
-            new Product { Id = 3, Name = "Product 3", Price = 30.0m }
-        };
-
+        
         public async Task<List<Product>> GetAllProducts() {
-            return await Task.FromResult(products);
+            var products = await context.Products.ToListAsync();
+            return products;
         }
         
         public async Task<Product?> GetProductById(int id)
         {
-            var result = products.FirstOrDefault(product => product.Id == id);
-            return await Task.FromResult(result);
+            var product = await context.Products.FindAsync(id);
+            return product;
+        }
+       
+        public async Task<ProductResponse> AddProduct(CreateProductRequest product)
+        {
+            var newProduct = new Product
+            {
+                Name = product.Name,
+                Price = product.Price
+            };
+            
+            context.Products.Add(newProduct);
+            await context.SaveChangesAsync();
+
+            return new ProductResponse
+            {
+                Id = newProduct.Id,
+                Name = newProduct.Name,
+                Price = newProduct.Price
+            };
         }
         /*
-        Task<Product> AddProduct(Product product) {
-        }
 
-        Task<bool> UpdateProduct(Product product)
-        {
+       Task<bool> UpdateProduct(Product product)
+       {
 
-        }
+       }
 
-        Task<bool> DeleteProduct() 
+       Task<bool> DeleteProduct() 
 
-        */
+       */
 
 
 
