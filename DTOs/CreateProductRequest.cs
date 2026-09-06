@@ -1,8 +1,11 @@
 ﻿namespace NetAPI.DTOs
 {
     public class CreateProductRequest
-    {        
+    {
         public string Name { get; set; }
-        public decimal Price { get; set; } = 0;
+        public decimal Price { get; set; }
+        public string? Description { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

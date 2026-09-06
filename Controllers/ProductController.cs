@@ -10,8 +10,7 @@ namespace NetAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class ProductController(ProductServices service) : ControllerBase
-{
-   
+{  
 
     [HttpGet]
     public async Task<ActionResult<List<ProductResponse>>> GetAllProducts()

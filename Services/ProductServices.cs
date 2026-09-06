@@ -24,7 +24,10 @@ namespace NetAPI.Services
             var newProduct = new Product
             {
                 Name = product.Name,
-                Price = product.Price
+                Price = product.Price,
+                Description = product.Description,
+                CreatedBy = product.CreatedBy,
+                CreatedDate = DateTime.Now
             };
             
             context.Products.Add(newProduct);
