@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using NetAPI.DTOs;
 using System.Reflection.PortableExecutable;
 
@@ -35,17 +36,39 @@ namespace NetAPI.Services
                 Name = newProduct.Name,
                 Price = newProduct.Price
             };
-        }
-        /*
+        }       
 
-       Task<bool> UpdateProduct(Product product)
+       public async Task<bool> UpdateProduct(int id, UpdateProductRequest product)
        {
+            var existingProduct = await context.Products.FindAsync(id);
+            if (existingProduct == null)
+            {
+                return false;
+            }
 
-       }
+            existingProduct.Name = product.Name;
+            existingProduct.Price = product.Price;
 
-       Task<bool> DeleteProduct() 
+            await context.SaveChangesAsync();
+            return true;
+        }
 
-       */
+       public async Task<bool> DeleteProduct(int id)
+        {
+            var productToDelete = await context.Products.FindAsync(id);
+
+            if(productToDelete == null)
+            {
+                return false;
+            }
+            
+            context.Products.Remove(productToDelete);
+            await context.SaveChangesAsync();
+
+            return true;
+        }
+
+       
 
 
 

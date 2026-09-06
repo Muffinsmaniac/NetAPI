@@ -36,5 +36,19 @@ public class ProductController(ProductServices service) : ControllerBase
         var createdProduct = await service.AddProduct(product);
         return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
     }
+
+    [HttpPut("id")]
+    public async Task<ActionResult> UpdateProduct(int id, UpdateProductRequest product)
+    {
+        var updated = await service.UpdateProduct(id, product);
+        return updated ? NoContent() : NotFound("The product id does not exist");
+    }
+
+    [HttpDelete("id")]
+    public async Task<ActionResult> DeleteProduct(int id)
+    {
+        var deleted = await service.DeleteProduct(id);
+        return deleted ? NoContent() : NotFound("The product id does not exist!");
+    }
 } 
 
